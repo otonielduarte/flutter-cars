@@ -3,8 +3,9 @@ import 'package:flutter/material.dart';
 class AppButton extends StatelessWidget {
   final Function onPressed;
   final String name;
+  final bool isLoading;
 
-  AppButton(this.name, {required this.onPressed});
+  AppButton(this.name, {required this.onPressed, this.isLoading = true});
 
   @override
   Widget build(BuildContext context) {
@@ -14,7 +15,9 @@ class AppButton extends StatelessWidget {
         width: double.maxFinite,
         child: ElevatedButton(
           onPressed: () => onPressed(),
-          child: Text(name),
+          child: isLoading
+              ? Center(child: CircularProgressIndicator(color: Colors.white))
+              : Text(name),
         ),
       ),
     );

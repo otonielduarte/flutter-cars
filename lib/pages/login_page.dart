@@ -19,6 +19,7 @@ class _LoginPageState extends State<LoginPage> {
   final _login = TextEditingController();
   final _password = TextEditingController();
   final _formKey = GlobalKey<FormState>();
+  bool isLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -79,17 +80,28 @@ class _LoginPageState extends State<LoginPage> {
         ),
         keyboardType: TextInputType.number,
       ),
-      AppButton("Login", onPressed: _handleLogin),
+      AppButton(
+        "Login",
+        onPressed: _handleLogin,
+        isLoading: isLoading,
+      ),
     ];
   }
 
   _handleLogin() async {
     if (!_formKey.currentState!.validate()) return null;
     final Map formValues = {'login': _login.text, 'password': _password.text};
+    setState(() {
+      isLoading = true;
+    });
 
     final ApiResponse response = await LoginApi.login(
       formValues['login'],
       formValues['password'],
+    ).whenComplete(
+      () => setState(() {
+        isLoading = false;
+      }),
     );
 
     if (response.ok) {
