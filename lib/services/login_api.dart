@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:cars/models/user.dart';
@@ -49,6 +50,10 @@ class LoginApi {
       return ApiResponse.error(mapResponse["error"]);
     } catch (error, exception) {
       print('Unexpected error $error > $exception');
+
+      if (error is TimeoutException) {
+        return ApiResponse.error("TimeoutException after 0:00:05");
+      }
 
       return ApiResponse.error("Unexpected error");
     }

@@ -1,7 +1,7 @@
 import 'package:cars/pages/home.dart';
 import 'package:cars/services/api_response.dart';
 import 'package:cars/services/login_api.dart';
-import 'package:cars/util/push.dart';
+import 'package:cars/util/nav.dart';
 import 'package:cars/util/toast.dart';
 import 'package:cars/widget/app_button.dart';
 import 'package:cars/widget/app_input_text.dart';
@@ -105,7 +105,7 @@ class _LoginPageState extends State<LoginPage> {
     );
 
     if (response.ok) {
-      push(context, Home(response.result));
+      push(context, Home(response.result), replace: true);
     } else {
       showToast(response.msg);
     }
