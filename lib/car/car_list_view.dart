@@ -1,5 +1,7 @@
 import 'package:cars/car/car.dart';
 import 'package:cars/car/car_api.dart';
+import 'package:cars/car/details_car_page.dart';
+import 'package:cars/shared/util/nav.dart';
 import 'package:cars/shared/widget/loading.dart';
 import 'package:flutter/material.dart';
 
@@ -84,7 +86,7 @@ class _CarsListViewState extends State<CarsListView>
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 TextButton(
-                  onPressed: () => print('details'),
+                  onPressed: () => push(context, DetailCarPage(car)),
                   child: Text('Detalhes'),
                 ),
                 TextButton(

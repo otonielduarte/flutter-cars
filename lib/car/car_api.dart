@@ -13,7 +13,6 @@ class CarApi {
       final response = await baseClient.get(carsUri);
       if (response.statusCode == 200) {
         List cars = jsonDecode(response.body);
-        print('>>>>>>>>>> decoded >>>>>>>> $cars');
         return cars.map((value) => Car.fromJson(value)).toList();
       }
       return throw HttpException("Opssss it is wrong");

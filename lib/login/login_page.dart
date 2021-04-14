@@ -2,6 +2,7 @@ import 'package:cars/car/home_page.dart';
 import 'package:cars/shared/services/api_response.dart';
 import 'package:cars/login/login_api.dart';
 import 'package:cars/shared/util/nav.dart';
+import 'package:cars/shared/util/prefs.dart';
 import 'package:cars/shared/util/toast.dart';
 import 'package:cars/shared/widget/app_button.dart';
 import 'package:cars/shared/widget/app_input_text.dart';
@@ -16,6 +17,23 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  @override
+  void initState() {
+    super.initState();
+
+    _setPrefsTest();
+  }
+
+  _setPrefsTest() async {
+    final result = await Prefs.getString("myKey");
+    if (result.isNotEmpty) {
+      print(">>>>>>>> PREFS $result");
+    } else {
+      print(">>>>>>>> PREFS SALVEI");
+      Prefs.setString("myKey", "oi estou nas prefs");
+    }
+  }
+
   final _login = TextEditingController();
   final _password = TextEditingController();
   final _formKey = GlobalKey<FormState>();
