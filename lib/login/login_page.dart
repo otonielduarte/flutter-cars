@@ -1,10 +1,10 @@
-import 'package:cars/pages/home.dart';
-import 'package:cars/services/api_response.dart';
-import 'package:cars/services/login_api.dart';
-import 'package:cars/util/nav.dart';
-import 'package:cars/util/toast.dart';
-import 'package:cars/widget/app_button.dart';
-import 'package:cars/widget/app_input_text.dart';
+import 'package:cars/car/home_page.dart';
+import 'package:cars/shared/services/api_response.dart';
+import 'package:cars/login/login_api.dart';
+import 'package:cars/shared/util/nav.dart';
+import 'package:cars/shared/util/toast.dart';
+import 'package:cars/shared/widget/app_button.dart';
+import 'package:cars/shared/widget/app_input_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -105,7 +105,7 @@ class _LoginPageState extends State<LoginPage> {
     );
 
     if (response.ok) {
-      push(context, Home(response.result), replace: true);
+      push(context, HomePage(), replace: true);
     } else {
       showToast(response.msg);
     }

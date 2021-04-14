@@ -1,9 +1,9 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:cars/models/user.dart';
-import 'package:cars/services/api_response.dart';
-import 'package:cars/services/base_api.dart';
+import 'package:cars/login/user.dart';
+import 'package:cars/shared/services/api_response.dart';
+import 'package:cars/shared/services/base_api.dart';
 
 const String baseUrl = "http://livrowebservices.com.br/rest";
 

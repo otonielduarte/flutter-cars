@@ -1,5 +1,5 @@
-import 'package:cars/pages/login_page.dart';
-import 'package:cars/util/nav.dart';
+import 'package:cars/login/login_page.dart';
+import 'package:cars/shared/util/nav.dart';
 import 'package:flutter/material.dart';
 
 class NavigationDrawer extends StatelessWidget {
