@@ -1,6 +1,8 @@
 # cars
 
-A new Flutter project.
+This is a study repository.
+
+# project name: Cars
 
 ## Getting Started
 
