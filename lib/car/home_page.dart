@@ -1,5 +1,5 @@
 import 'package:cars/car/car.dart';
-import 'package:cars/car/car_list_view.dart';
+import 'package:cars/car/car_page.dart';
 import 'package:cars/login/nav_drawer.dart';
 import 'package:cars/shared/util/prefs.dart';
 import 'package:cars/shared/widget/loading.dart';
@@ -63,9 +63,9 @@ class _HomePageState extends State<HomePage>
           : TabBarView(
               controller: _tabController,
               children: [
-                CarsListView(CarType.classicos),
-                CarsListView(CarType.esportivos),
-                CarsListView(CarType.luxo),
+                CarsPage(CarType.classicos),
+                CarsPage(CarType.esportivos),
+                CarsPage(CarType.luxo),
               ],
             ),
       drawer: NavigationDrawer(),

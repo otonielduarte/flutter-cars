@@ -3,10 +3,11 @@ import 'package:http/http.dart';
 import 'package:http_interceptor/http_interceptor.dart';
 
 Client baseClient = HttpClientWithInterceptor.build(
-    requestTimeout: Duration(seconds: 5),
-    interceptors: [
-      LoggingInterceptor(),
-    ]);
+  requestTimeout: Duration(seconds: 5),
+  interceptors: [
+    LoggingInterceptor(),
+  ],
+);
 
 const String baseUrlV1 = 'https://carros-springboot.herokuapp.com/api/v1';
 const String baseUrlV2 = "https://carros-springboot.herokuapp.com/api/v2";

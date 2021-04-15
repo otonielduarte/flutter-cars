@@ -1,3 +1,4 @@
+import 'package:cars/shared/widget/app_text.dart';
 import 'package:flutter/material.dart';
 
 class AppButton extends StatelessWidget {
@@ -17,7 +18,7 @@ class AppButton extends StatelessWidget {
           onPressed: () => onPressed(),
           child: isLoading
               ? Center(child: CircularProgressIndicator(color: Colors.white))
-              : Text(name),
+              : AppText(name),
         ),
       ),
     );

@@ -1,6 +1,6 @@
 import 'dart:async';
 
-class GenericBloc<T> {
+abstract class GenericBloc<T> {
   final _controller = StreamController<T>();
 
   Stream<T> get stream => _controller.stream;
@@ -16,6 +16,8 @@ class GenericBloc<T> {
   }
 
   void dispose() {
-    _controller.close();
+    if (!_controller.isClosed) {
+      _controller.close();
+    }
   }
 }

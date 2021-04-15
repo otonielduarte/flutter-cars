@@ -1,6 +1,7 @@
 import 'package:cars/login/login_page.dart';
 import 'package:cars/login/user.dart';
 import 'package:cars/shared/util/nav.dart';
+import 'package:cars/shared/widget/app_text.dart';
 import 'package:flutter/material.dart';
 
 class NavigationDrawer extends StatelessWidget {
@@ -49,8 +50,8 @@ class NavigationDrawer extends StatelessWidget {
         User? user = snapshot.data;
         return user != null
             ? UserAccountsDrawerHeader(
-                accountName: Text(user.name),
-                accountEmail: Text(user.email),
+                accountName: AppText(user.name),
+                accountEmail: AppText(user.email, fontSize: 14,),
                 currentAccountPicture:
                     CircleAvatar(backgroundImage: NetworkImage(user.urlFoto)),
               )

@@ -1,3 +1,4 @@
+import 'package:cars/shared/widget/app_text.dart';
 import 'package:flutter/material.dart';
 
 class LoadingComponent extends StatelessWidget {
@@ -15,12 +16,9 @@ class LoadingComponent extends StatelessWidget {
           CircularProgressIndicator(),
           Padding(
             padding: EdgeInsets.only(top: 8.0),
-            child: Text(
+            child: AppText(
               message,
-              style: TextStyle(
-                fontSize: 16.0,
-                fontWeight: FontWeight.bold,
-              ),
+              bold: true,
             ),
           ),
         ],

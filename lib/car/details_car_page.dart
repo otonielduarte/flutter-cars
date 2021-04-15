@@ -1,38 +1,161 @@
 import 'package:cars/car/car.dart';
+import 'package:cars/car/lorem_bloc.dart';
+import 'package:cars/shared/widget/app_text.dart';
+import 'package:cars/shared/widget/loading.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 const imageNotFountUrl =
     "https://bitsofco.de/content/images/2018/12/broken-1.png";
 
-class DetailCarPage extends StatelessWidget {
+class DetailCarPage extends StatefulWidget {
   final Car car;
 
-  const DetailCarPage(this.car);
+  DetailCarPage(this.car);
+
+  @override
+  _DetailCarPageState createState() => _DetailCarPageState();
+}
+
+class _DetailCarPageState extends State<DetailCarPage> {
+  final _loremBloc = LoremBloc();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    _loremBloc.fetch();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("${car.nome}"),
+        title: Text("${widget.car.nome}"),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.place),
+            onPressed: () => ('placeIcon'),
+          ),
+          IconButton(
+            icon: Icon(Icons.videocam),
+            onPressed: () => ('videocam'),
+          ),
+          PopupMenuButton(
+            onSelected: _handleMenuItem,
+            itemBuilder: (builder) {
+              return [
+                PopupMenuItem(
+                  child: Text('Edit'),
+                  value: 'edit',
+                ),
+                PopupMenuItem(
+                  child: Text('Remove'),
+                  value: 'remove',
+                ),
+                PopupMenuItem(
+                  child: Text('Share'),
+                  value: 'share',
+                ),
+              ];
+            },
+          )
+        ],
       ),
-      body: Center(
-        child: Container(
-          width: MediaQuery.of(context).size.width,
-          height: MediaQuery.of(context).size.height,
-          color: Colors.black12,
-          padding: EdgeInsets.all(16),
-          child: _image(car.urlFoto ?? imageNotFountUrl, context),
+      body: Container(
+        padding: EdgeInsets.all(16.0),
+        child: ListView(
+          children: [
+            _image(widget.car.urlFoto ?? imageNotFountUrl, context),
+            _line(),
+            Divider(),
+            Container(
+              margin: EdgeInsets.only(top: 16, bottom: 16),
+              child: StreamBuilder<String>(
+                stream: _loremBloc.stream,
+                initialData: "",
+                builder: (context, AsyncSnapshot<String> snapshot) {
+                  if (snapshot.hasError) {
+                    return AppText("Texto indisponivel");
+                  }
+                  if (snapshot.hasData) {
+                    String s = snapshot.data ?? "";
+                    return AppText(
+                      s,
+                      justify: true,
+                    );
+                  }
+                  print(">>>>>>>>>>LOading");
+                  return LoadingComponent();
+                },
+              ),
+            )
+          ],
         ),
       ),
+    );
+  }
+
+  _line() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            AppText(
+              '${widget.car.nome}',
+              fontSize: 24,
+              bold: true,
+            ),
+            AppText(
+              '${widget.car.tipo}',
+              fontSize: 16,
+            ),
+          ],
+        ),
+        Row(
+          children: [
+            IconButton(
+              onPressed: _onClickFavorite,
+              icon: Icon(Icons.favorite),
+            ),
+            IconButton(
+              onPressed: _onClickShare,
+              icon: Icon(Icons.share),
+            )
+          ],
+        )
+      ],
     );
   }
 
   Image _image(String url, BuildContext context) {
     return Image.network(
       url,
-      fit: BoxFit.contain,
       errorBuilder: (context, error, stackTrace) =>
           _image(imageNotFountUrl, context),
     );
+  }
+
+  void _onClickFavorite() {
+    print('on favorite');
+  }
+
+  void _onClickShare() {
+    print('on Share');
+  }
+
+  void _handleMenuItem(String value) {
+    switch (value) {
+      case 'edit':
+        print('Edit !!!!');
+        break;
+      case 'remove':
+        print('Remove !!!!');
+        break;
+      case 'share':
+        print('Share !!!!');
+        break;
+    }
   }
 }
