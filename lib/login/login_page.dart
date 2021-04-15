@@ -1,8 +1,8 @@
 import 'package:cars/car/home_page.dart';
+import 'package:cars/login/login_bloc.dart';
+import 'package:cars/login/user.dart';
 import 'package:cars/shared/services/api_response.dart';
-import 'package:cars/login/login_api.dart';
 import 'package:cars/shared/util/nav.dart';
-import 'package:cars/shared/util/prefs.dart';
 import 'package:cars/shared/util/toast.dart';
 import 'package:cars/shared/widget/app_button.dart';
 import 'package:cars/shared/widget/app_input_text.dart';
@@ -21,23 +21,20 @@ class _LoginPageState extends State<LoginPage> {
   void initState() {
     super.initState();
 
-    _setPrefsTest();
+    _tryAutoLogin();
   }
 
-  _setPrefsTest() async {
-    final result = await Prefs.getString("myKey");
-    if (result.isNotEmpty) {
-      print(">>>>>>>> PREFS $result");
-    } else {
-      print(">>>>>>>> PREFS SALVEI");
-      Prefs.setString("myKey", "oi estou nas prefs");
+  _tryAutoLogin() async {
+    final user = await User.get();
+    if (user != null) {
+      push(context, HomePage(), replace: true);
     }
   }
 
   final _login = TextEditingController();
   final _password = TextEditingController();
   final _formKey = GlobalKey<FormState>();
-  bool isLoading = false;
+  final _bloc = LoginBloc();
 
   @override
   Widget build(BuildContext context) {
@@ -98,31 +95,31 @@ class _LoginPageState extends State<LoginPage> {
         ),
         keyboardType: TextInputType.number,
       ),
-      AppButton(
-        "Login",
-        onPressed: _handleLogin,
-        isLoading: isLoading,
-      ),
+      StreamBuilder<bool>(
+          stream: _bloc.stream,
+          initialData: false,
+          builder: (context, snapshot) {
+            return AppButton(
+              "Login",
+              onPressed: _handleLogin,
+              isLoading: snapshot.data ?? true,
+            );
+          }),
     ];
   }
 
   _handleLogin() async {
     if (!_formKey.currentState!.validate()) return null;
     final Map formValues = {'login': _login.text, 'password': _password.text};
-    setState(() {
-      isLoading = true;
-    });
 
-    final ApiResponse response = await LoginApi.login(
+    final ApiResponse response = await _bloc.login(
       formValues['login'],
       formValues['password'],
-    ).whenComplete(
-      () => setState(() {
-        isLoading = false;
-      }),
     );
 
     if (response.ok) {
+      User user = response.result;
+      user.saveToPrefs();
       push(context, HomePage(), replace: true);
     } else {
       showToast(response.msg);
@@ -135,5 +132,12 @@ class _LoginPageState extends State<LoginPage> {
     String message = "Please enter some text",
   }) {
     return (value.isEmpty || minLength > value.length) ? message : null;
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+
+    _bloc.dispose();
   }
 }

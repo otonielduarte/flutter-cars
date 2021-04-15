@@ -22,12 +22,12 @@ class _HomePageState extends State<HomePage>
   }
 
   _initTabs() async {
+    // Primeiro busca o índice nas prefs.
+    int tabIdx = await Prefs.getInt("tabIdx");
+
     // Depois cria o TabController
     // No método build na primeira vez ele poderá estar nulo
     _tabController = TabController(length: 3, vsync: this);
-
-    // Primeiro busca o índice nas prefs.
-    int tabIdx = await Prefs.getInt("tabIdx");
 
     // Agora que temos o TabController e o índice da tab,
     // chama o setState para redesenhar a tela
@@ -36,7 +36,6 @@ class _HomePageState extends State<HomePage>
     });
 
     _tabController!.addListener(() {
-      print('>>>>>>>>>> eventtab listener ${_tabController!.index}');
       Prefs.setInt("tabIdx", _tabController!.index);
     });
   }
@@ -71,5 +70,10 @@ class _HomePageState extends State<HomePage>
             ),
       drawer: NavigationDrawer(),
     );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 }

@@ -1,4 +1,5 @@
 import 'package:cars/login/login_page.dart';
+import 'package:cars/login/user.dart';
 import 'package:cars/shared/util/nav.dart';
 import 'package:flutter/material.dart';
 
@@ -11,14 +12,7 @@ class NavigationDrawer extends StatelessWidget {
       child: Drawer(
         child: ListView(
           children: [
-            UserAccountsDrawerHeader(
-              accountName: Text("Otoniel"),
-              accountEmail: Text("otonielduarte2@gmail.com"),
-              currentAccountPicture: CircleAvatar(
-                backgroundImage: NetworkImage(
-                    "http://carismartes.com.br/assets/global/images/avatars/avatar1_big.png"),
-              ),
-            ),
+            _header(),
             ListTile(
               leading: Icon(Icons.star),
               title: Text("Favorites"),
@@ -44,7 +38,29 @@ class NavigationDrawer extends StatelessWidget {
     );
   }
 
+  _header() {
+    Future<User?> future = User.get();
+    return FutureBuilder<User?>(
+      future: future,
+      builder: (context, snapshot) {
+        if (snapshot.hasError) {
+          return Container();
+        }
+        User? user = snapshot.data;
+        return user != null
+            ? UserAccountsDrawerHeader(
+                accountName: Text(user.name),
+                accountEmail: Text(user.email),
+                currentAccountPicture:
+                    CircleAvatar(backgroundImage: NetworkImage(user.urlFoto)),
+              )
+            : Container();
+      },
+    );
+  }
+
   void _handleLogout(BuildContext context) {
+    User.clear();
     push(
       context,
       LoginPage(),

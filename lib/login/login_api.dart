@@ -19,14 +19,6 @@ class LoginApi {
     try {
       final Uri urlLogin = Uri.parse("$baseUrlV2/login");
 
-      /* 
-    // TO V1
-    Map params = {
-      'login': login,
-      'senha': password,
-    }; */
-
-      // TO V2
       Map params = {
         'username': login,
         'password': password,
