@@ -20,7 +20,7 @@ class CarApi extends BaseApi {
     return throw HttpException("Opssss it is wrong");
   }
 
-  Future<ApiResponse<Car>> save(Car car) async {
+  Future<ApiResponse> save(Car car) async {
     final response = await post(
       '$baseUrlV2/carros/',
       getHeader(),
@@ -31,6 +31,29 @@ class CarApi extends BaseApi {
       final Car car = Car.fromJson(response.result);
       return ApiResponse.ok(car);
     }
-    return ApiResponse.error(response.msg);
+    return response;
+  }
+
+  Future<ApiResponse> remove(int carId) async {
+    final response = await delete(
+      '$baseUrlV2/carros/$carId',
+      await getHeader(),
+    );
+
+    return response;
+  }
+
+  Future<ApiResponse> update(Car car) async {
+    final response = await put(
+      '$baseUrlV2/carros/${car.id}',
+      await getHeader(),
+      car.toJson(),
+    );
+
+    if (response.ok) {
+      final Car car = Car.fromJson(response.result);
+      return ApiResponse.ok(car);
+    }
+    return response;
   }
 }

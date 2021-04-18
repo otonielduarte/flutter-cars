@@ -17,38 +17,84 @@ abstract class BaseApi {
     return headers;
   }
 
-  Client get client => HttpClientWithInterceptor.build(
-        requestTimeout: Duration(seconds: 15),
-        interceptors: [
-          LoggingInterceptor(),
-        ],
-      );
+  Client _client = HttpClientWithInterceptor.build(
+    requestTimeout: Duration(seconds: 15),
+    interceptors: [
+      LoggingInterceptor(),
+    ],
+  );
 
-  Future<Response> apiGet(String url, Map<String, String> headers) async {
-    final Uri endpoint = Uri.parse(url);
-
-    return client.get(
-      endpoint,
+  Future apiGet(String url, Map<String, String> headers) async {
+    return _client.get(
+      Uri.parse(url),
       headers: headers,
     );
   }
 
-  Future<ApiResponse<dynamic>> post(
-      String url, Map<String, String> headers, dynamic body) async {
-    final Uri endpoint = Uri.parse(url);
+  Future<ApiResponse> put(
+    String url,
+    Map<String, String> headers,
+    dynamic body,
+  ) async {
+    try {
+      Response response = await _client.put(
+        Uri.parse(url),
+        headers: headers,
+        body: jsonEncode(body),
+      );
 
-    Response response = await client.post(
-      endpoint,
-      headers: headers,
-      body: jsonEncode(body),
-    );
+      Map<dynamic, dynamic> jsonMap = jsonDecode(response.body);
 
-    Map<dynamic, dynamic> jsonMap = jsonDecode(response.body);
-
-    if (response.statusCode == 200 || response.statusCode == 201) {
-      return ApiResponse.ok(jsonMap);
+      if (response.statusCode == 200) {
+        return ApiResponse.ok(jsonMap);
+      }
+      return ApiResponse.error(jsonMap['error']);
+    } catch (e) {
+      return ApiResponse.error("Algo deu errado tente novamente mais tarde");
     }
-    return ApiResponse.error(jsonMap['error']);
+  }
+
+  Future<ApiResponse> delete(String url, Map<String, String> headers) async {
+    try {
+      Response response = await _client.delete(
+        Uri.parse(url),
+        headers: headers,
+      );
+
+      Map<dynamic, dynamic> jsonMap = jsonDecode(response.body);
+
+      if (response.statusCode == 200) {
+        return ApiResponse.ok(jsonMap['msg']);
+      }
+      return ApiResponse.error(jsonMap['error']);
+    } on Exception catch (e) {
+      print('error >>>>>>>>>>>>>> $e');
+      return ApiResponse.error("Algo deu errado tente novamente mais tarde");
+    }
+  }
+
+  Future<ApiResponse> post(
+    String url,
+    Map<String, String> headers,
+    dynamic body,
+  ) async {
+    try {
+      Response response = await _client.post(
+        Uri.parse(url),
+        headers: headers,
+        body: jsonEncode(body),
+      );
+
+      Map<dynamic, dynamic> jsonMap = jsonDecode(response.body);
+
+      if (response.statusCode == 201) {
+        return ApiResponse.ok(jsonMap);
+      }
+      return ApiResponse.error(jsonMap['error']);
+    } on Exception catch (e) {
+      print('error >>>>>>>>>>>>>> $e');
+      return ApiResponse.error("Algo deu errado tente novamente mais tarde");
+    }
   }
 }
 

@@ -1,8 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cars/car/car.dart';
+import 'package:cars/car/car_api.dart';
 import 'package:cars/car/carro_form_page.dart';
 import 'package:cars/car/lorem_bloc.dart';
 import 'package:cars/shared/util/nav.dart';
+import 'package:cars/shared/util/toast.dart';
 import 'package:cars/shared/widget/app_text.dart';
 import 'package:cars/shared/widget/loading.dart';
 import 'package:flutter/cupertino.dart';
@@ -152,11 +154,22 @@ class _DetailCarPageState extends State<DetailCarPage> {
         push(context, CarFormPage(widget.car));
         break;
       case 'remove':
-        print('Remove !!!!');
+        _handleDeleteCar(widget.car);
         break;
       case 'share':
         print('Share !!!!');
         break;
     }
+  }
+
+  _handleDeleteCar(Car car) async {
+    final int carId = car.id ?? -1;
+    if (carId == -1) return;
+    final response = await CarApi().remove(carId);
+    if (response.ok) {
+      showToast(response.result);
+      Navigator.pop(context);
+    }
+    showToast(response.msg);
   }
 }

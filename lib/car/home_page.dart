@@ -53,9 +53,13 @@ class _HomePageState extends State<HomePage>
       drawer: NavigationDrawer(),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
-        onPressed: () => push(context, CarFormPage(null)),
+        onPressed: () => _handleAddNewCar(context),
       ),
     );
+  }
+
+  _handleAddNewCar(BuildContext context) {
+    push(context, CarFormPage(null));
   }
 
   Widget _body() {

@@ -189,9 +189,16 @@ class _CarroFormPageState extends State<CarFormPage> {
 
     setState(() => _showProgress = true);
 
-    final ApiResponse response = await CarApi()
-        .save(c)
-        .whenComplete(() => setState(() => _showProgress = false));
+    ApiResponse response;
+    if (car == null) {
+      response = await CarApi()
+          .save(c)
+          .whenComplete(() => setState(() => _showProgress = false));
+    } else {
+      response = await CarApi()
+          .update(c)
+          .whenComplete(() => setState(() => _showProgress = false));
+    }
 
     if (response.ok) {
       showToast('Carro ${response.result.nome} salvo com sucesso!');
