@@ -5,7 +5,7 @@ import 'package:http/http.dart';
 class LoremBloc extends GenericBloc<String> {
   fetch() async {
     try {
-      String s = await LoripsumApi.get();
+      String s = await LoripsumApi().get();
       add(s);
     } catch (e, exception) {
       addError(e);
@@ -15,11 +15,9 @@ class LoremBloc extends GenericBloc<String> {
   }
 }
 
-class LoripsumApi {
-  static Future<String> get() async {
-    Uri url = Uri.parse("https://loripsum.net/api");
-
-    final Response response = await baseClient.get(url);
+class LoripsumApi extends BaseApi {
+  Future<String> get() async {
+    final Response response = await apiGet("https://loripsum.net/api", {});
     if (response.statusCode == 200) {
       String s = response.body.toString();
 

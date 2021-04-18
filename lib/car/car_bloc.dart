@@ -5,7 +5,7 @@ import 'package:cars/shared/generic_bloc.dart';
 class CarBloc extends GenericBloc<List<Car>> {
   Future<List<Car>> fetch(type) async {
     try {
-      List<Car> cars = await CarApi.getCarsByType(type);
+      List<Car> cars = await CarApi().getCarsByType(type);
 
       add(cars);
 

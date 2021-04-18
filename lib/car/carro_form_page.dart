@@ -1,5 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cars/car/car.dart';
+import 'package:cars/car/car_api.dart';
+import 'package:cars/shared/services/api_response.dart';
+import 'package:cars/shared/util/toast.dart';
 import 'package:cars/shared/widget/app_button.dart';
 import 'package:cars/shared/widget/app_input_text.dart';
 import 'package:cars/shared/widget/app_radio_button.dart';
@@ -97,15 +100,11 @@ class _CarroFormPageState extends State<CarFormPage> {
               label: "Description",
               hintText: "Description",
               validator: (value) => _validateNome(value)),
-          Container(
-            height: 50,
-            margin: new EdgeInsets.only(top: 20.0),
-            child: AppButton(
-              "Salvar",
-              isLoading: _showProgress,
-              onPressed: _onClickSalvar,
-            ),
-          )
+          AppButton(
+            "Salvar",
+            isLoading: _showProgress,
+            onPressed: _onClickSalvar,
+          ),
         ],
       ),
     );
@@ -188,20 +187,17 @@ class _CarroFormPageState extends State<CarFormPage> {
     c.desc = tDesc.text;
     c.tipo = _getTipo();
 
-    print("Car: $c");
+    setState(() => _showProgress = true);
 
-    setState(() {
-      _showProgress = true;
-    });
+    final ApiResponse response = await CarApi()
+        .save(c)
+        .whenComplete(() => setState(() => _showProgress = false));
 
-    print("Salvar o car ${c.toJson()}");
-
-    await Future.delayed(Duration(seconds: 3));
-
-    setState(() {
-      _showProgress = false;
-    });
-
-    print("Fim.");
+    if (response.ok) {
+      showToast('Carro ${response.result.nome} salvo com sucesso!');
+      Navigator.pop(context);
+    } else {
+      showToast(response.msg);
+    }
   }
 }

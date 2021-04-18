@@ -18,7 +18,10 @@ class AppButton extends StatelessWidget {
           onPressed: () => onPressed(),
           child: isLoading
               ? Center(child: CircularProgressIndicator(color: Colors.white))
-              : AppText(name),
+              : AppText(
+                  name,
+                  color: Colors.white,
+                ),
         ),
       ),
     );

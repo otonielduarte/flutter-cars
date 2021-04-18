@@ -7,7 +7,7 @@ class LoginBloc extends GenericBloc<bool> {
   Future<ApiResponse<User>> login(String login, String password) async {
     add(true);
 
-    ApiResponse response = await LoginApi.login(login, password);
+    ApiResponse response = await LoginApi().login(login, password);
 
     add(false);
 
