@@ -41,11 +41,8 @@ class User {
     Prefs.setString('user.info', jsonEncode(toJson()));
   }
 
-  static Future<User?> get() async {
+  static Future<User> get() async {
     String json = await Prefs.getString('user.info');
-    if (json.isEmpty) {
-      return null;
-    }
     return User.fromJson(jsonDecode(json));
   }
 }

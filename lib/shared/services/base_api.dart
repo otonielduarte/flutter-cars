@@ -3,7 +3,7 @@ import 'package:http/http.dart';
 import 'package:http_interceptor/http_interceptor.dart';
 
 Client baseClient = HttpClientWithInterceptor.build(
-  requestTimeout: Duration(seconds: 5),
+  requestTimeout: Duration(seconds: 15),
   interceptors: [
     LoggingInterceptor(),
   ],

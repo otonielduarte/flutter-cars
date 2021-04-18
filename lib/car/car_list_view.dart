@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cars/car/car.dart';
 import 'package:cars/car/details_car_page.dart';
 import 'package:cars/shared/util/nav.dart';
@@ -27,18 +28,17 @@ class CarsListView extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Center(
-                  child: _image(car.urlFoto ??
-                      'https://bitsofco.de/content/images/2018/12/broken-1.png'),
+                  child: _image(car.urlFoto ?? ''),
                 ),
                 ListTile(
                   title: Text(
-                    car.nome ?? 'Empty name',
+                    car.nome ?? '',
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(fontSize: 16),
                   ),
                   subtitle: Text(
-                    car.desc ?? 'Empty description',
+                    car.desc ?? '',
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
@@ -65,13 +65,11 @@ class CarsListView extends StatelessWidget {
     );
   }
 
-  Image _image(String url) {
-    return Image.network(
-      url,
-      width: 150,
-      height: 120,
-      errorBuilder: (context, error, stackTrace) =>
-          _image("https://bitsofco.de/content/images/2018/12/broken-1.png"),
-    );
+  _image(String url) {
+    return CachedNetworkImage(
+        width: 150,
+        height: 120,
+        imageUrl: url,
+        errorWidget: (context, url, error) => Icon(Icons.error));
   }
 }

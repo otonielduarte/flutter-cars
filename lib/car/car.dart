@@ -5,16 +5,16 @@ class CarType {
 }
 
 class Car {
-  final int? id;
-  final String? tipo;
-  final String? nome;
-  final String? desc;
-  final String? urlFoto;
-  final String? urlVideo;
-  final String? latitude;
-  final String? longitude;
+  int? id;
+  String? tipo;
+  String? nome;
+  String? desc;
+  String? urlFoto;
+  String? urlVideo;
+  String? latitude;
+  String? longitude;
 
-  const Car({
+  Car({
     this.nome,
     this.desc,
     this.urlFoto,

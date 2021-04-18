@@ -2,6 +2,7 @@ import 'package:cars/car/car.dart';
 import 'package:cars/car/car_bloc.dart';
 import 'package:cars/car/car_list_view.dart';
 import 'package:cars/shared/widget/app_text.dart';
+import 'package:cars/shared/widget/loading.dart';
 import 'package:cars/shared/widget/text_error.dart';
 import 'package:flutter/material.dart';
 
@@ -27,8 +28,8 @@ class _CarsPageState extends State<CarsPage>
     _loadData();
   }
 
-  _loadData() {
-    _bloc.fetch(widget.type);
+  Future<void> _loadData() {
+    return _bloc.fetch(widget.type);
   }
 
   @override
@@ -40,21 +41,26 @@ class _CarsPageState extends State<CarsPage>
   }
 
   _futureBuilder() {
-    return StreamBuilder<List<Car>>(
-      stream: _bloc.stream,
-      initialData: [],
-      builder: (BuildContext context, AsyncSnapshot<List<Car>> snapshot) {
-        if (snapshot.hasError) {
-          return AppTextError(onTap: _loadData());
-        }
-        if (snapshot.hasData) {
-          final cars = snapshot.data;
-          return CarsListView(cars!);
-        }
-        return Center(
-          child: AppText('No results'),
-        );
-      },
+    return RefreshIndicator(
+      onRefresh: _loadData,
+      child: StreamBuilder<List<Car>>(
+        stream: _bloc.stream,
+        builder: (BuildContext context, AsyncSnapshot<List<Car>> snapshot) {
+          if (snapshot.hasError) {
+            return AppTextError();
+          }
+          if (snapshot.hasData) {
+            final cars = snapshot.data;
+            if (cars!.length > 0) {
+              return CarsListView(cars);
+            }
+            return Center(
+              child: AppText('No results'),
+            );
+          }
+          return LoadingComponent();
+        },
+      ),
     );
   }
 

@@ -17,20 +17,6 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  @override
-  void initState() {
-    super.initState();
-
-    _tryAutoLogin();
-  }
-
-  _tryAutoLogin() async {
-    final user = await User.get();
-    if (user != null) {
-      push(context, HomePage(), replace: true);
-    }
-  }
-
   final _login = TextEditingController();
   final _password = TextEditingController();
   final _formKey = GlobalKey<FormState>();

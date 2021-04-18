@@ -1,4 +1,4 @@
-import 'package:cars/login/login_page.dart';
+import 'package:cars/splash/splash.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -14,7 +14,7 @@ class CarsApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         backgroundColor: Colors.white,
       ),
-      home: LoginPage(),
+      home: SplashScreen(),
     );
   }
 }

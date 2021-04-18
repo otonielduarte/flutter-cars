@@ -1,5 +1,8 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cars/car/car.dart';
+import 'package:cars/car/carro_form_page.dart';
 import 'package:cars/car/lorem_bloc.dart';
+import 'package:cars/shared/util/nav.dart';
 import 'package:cars/shared/widget/app_text.dart';
 import 'package:cars/shared/widget/loading.dart';
 import 'package:flutter/cupertino.dart';
@@ -22,7 +25,7 @@ class _DetailCarPageState extends State<DetailCarPage> {
 
   @override
   void initState() {
-    // TODO: implement initState
+    super.initState();
     _loremBloc.fetch();
   }
 
@@ -65,14 +68,13 @@ class _DetailCarPageState extends State<DetailCarPage> {
         padding: EdgeInsets.all(16.0),
         child: ListView(
           children: [
-            _image(widget.car.urlFoto ?? imageNotFountUrl, context),
+            _image(widget.car.urlFoto ?? ''),
             _line(),
             Divider(),
             Container(
               margin: EdgeInsets.only(top: 16, bottom: 16),
               child: StreamBuilder<String>(
                 stream: _loremBloc.stream,
-                initialData: "",
                 builder: (context, AsyncSnapshot<String> snapshot) {
                   if (snapshot.hasError) {
                     return AppText("Texto indisponivel");
@@ -84,7 +86,6 @@ class _DetailCarPageState extends State<DetailCarPage> {
                       justify: true,
                     );
                   }
-                  print(">>>>>>>>>>LOading");
                   return LoadingComponent();
                 },
               ),
@@ -129,12 +130,12 @@ class _DetailCarPageState extends State<DetailCarPage> {
     );
   }
 
-  Image _image(String url, BuildContext context) {
-    return Image.network(
-      url,
-      errorBuilder: (context, error, stackTrace) =>
-          _image(imageNotFountUrl, context),
-    );
+  _image(String url) {
+    return CachedNetworkImage(
+        imageUrl: url,
+        progressIndicatorBuilder: (context, url, downloadProgress) =>
+            CircularProgressIndicator(value: downloadProgress.progress),
+        errorWidget: (context, url, error) => Icon(Icons.error));
   }
 
   void _onClickFavorite() {
@@ -148,7 +149,7 @@ class _DetailCarPageState extends State<DetailCarPage> {
   void _handleMenuItem(String value) {
     switch (value) {
       case 'edit':
-        print('Edit !!!!');
+        push(context, CarFormPage(widget.car));
         break;
       case 'remove':
         print('Remove !!!!');

@@ -1,6 +1,8 @@
 import 'package:cars/car/car.dart';
 import 'package:cars/car/car_page.dart';
+import 'package:cars/car/carro_form_page.dart';
 import 'package:cars/login/nav_drawer.dart';
+import 'package:cars/shared/util/nav.dart';
 import 'package:cars/shared/util/prefs.dart';
 import 'package:cars/shared/widget/loading.dart';
 import 'package:flutter/material.dart';
@@ -45,31 +47,43 @@ class _HomePageState extends State<HomePage>
     return Scaffold(
       appBar: AppBar(
         title: Text('Carros'),
-        bottom: _tabController == null
-            ? null
-            : TabBar(
-                controller: _tabController,
-                tabs: [
-                  Tab(text: "Clássics"),
-                  Tab(text: "Sport"),
-                  Tab(text: "Luxe"),
-                ],
-              ),
+        bottom: _appBarBottom(),
       ),
-      body: _tabController == null
-          ? LoadingComponent(
-              message: "loading tabs",
-            )
-          : TabBarView(
-              controller: _tabController,
-              children: [
-                CarsPage(CarType.classicos),
-                CarsPage(CarType.esportivos),
-                CarsPage(CarType.luxo),
-              ],
-            ),
+      body: _body(),
       drawer: NavigationDrawer(),
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.add),
+        onPressed: () => push(context, CarFormPage(null)),
+      ),
     );
+  }
+
+  Widget _body() {
+    return _tabController == null
+        ? LoadingComponent(
+            message: "loading tabs",
+          )
+        : TabBarView(
+            controller: _tabController,
+            children: [
+              CarsPage(CarType.classicos),
+              CarsPage(CarType.esportivos),
+              CarsPage(CarType.luxo),
+            ],
+          );
+  }
+
+  TabBar? _appBarBottom() {
+    return _tabController == null
+        ? null
+        : TabBar(
+            controller: _tabController,
+            tabs: [
+              Tab(text: "Clássics"),
+              Tab(text: "Sport"),
+              Tab(text: "Luxe"),
+            ],
+          );
   }
 
   @override

@@ -10,11 +10,11 @@ class CarApi {
   static Future<List<Car>> getCarsByType(String type) async {
     final Uri carsUri = Uri.parse('$baseUrlV2/carros/tipo/$type');
 
-    User? user = await User.get();
+    User user = await User.get();
 
     Map<String, String> headers = {
       "Content-type": "application/json",
-      "Authorization": "Bearer ${user?.token}"
+      "Authorization": "Bearer ${user.token}"
     };
 
     final response = await baseClient.get(carsUri, headers: headers);
