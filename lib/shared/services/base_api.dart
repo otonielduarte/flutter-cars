@@ -7,7 +7,7 @@ import 'package:http/http.dart';
 import 'package:http_interceptor/http_interceptor.dart';
 
 abstract class BaseApi {
-  getHeader() async {
+  getHeaders() async {
     User user = await User.get();
 
     Map<String, String> headers = {
@@ -16,6 +16,8 @@ abstract class BaseApi {
     };
     return headers;
   }
+
+  Client get client => _client;
 
   Client _client = HttpClientWithInterceptor.build(
     requestTimeout: Duration(seconds: 15),
@@ -87,7 +89,7 @@ abstract class BaseApi {
 
       Map<dynamic, dynamic> jsonMap = jsonDecode(response.body);
 
-      if (response.statusCode == 201) {
+      if (response.statusCode == 201 || response.statusCode == 200) {
         return ApiResponse.ok(jsonMap);
       }
       return ApiResponse.error(jsonMap['error']);

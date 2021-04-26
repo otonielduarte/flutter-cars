@@ -10,7 +10,7 @@ class CarApi extends BaseApi {
   Future<List<Car>> getCarsByType(String type) async {
     final response = await apiGet(
       '$baseUrlV2/carros/tipo/$type',
-      await getHeader(),
+      await getHeaders(),
     );
 
     if (response.statusCode == 200) {
@@ -23,7 +23,7 @@ class CarApi extends BaseApi {
   Future<ApiResponse> save(Car car) async {
     final response = await post(
       '$baseUrlV2/carros/',
-      getHeader(),
+      await getHeaders(),
       car.toJson(),
     );
 
@@ -37,7 +37,7 @@ class CarApi extends BaseApi {
   Future<ApiResponse> remove(int carId) async {
     final response = await delete(
       '$baseUrlV2/carros/$carId',
-      await getHeader(),
+      await getHeaders(),
     );
 
     return response;
@@ -46,7 +46,7 @@ class CarApi extends BaseApi {
   Future<ApiResponse> update(Car car) async {
     final response = await put(
       '$baseUrlV2/carros/${car.id}',
-      await getHeader(),
+      await getHeaders(),
       car.toJson(),
     );
 

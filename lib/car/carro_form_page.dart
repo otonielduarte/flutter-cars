@@ -1,14 +1,20 @@
+import 'dart:io';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cars/car/car.dart';
 import 'package:cars/car/car_api.dart';
 import 'package:cars/shared/services/api_response.dart';
+import 'package:cars/shared/services/upload_api.dart';
+import 'package:cars/shared/upload/upload_model.dart';
 import 'package:cars/shared/util/toast.dart';
 import 'package:cars/shared/widget/app_button.dart';
+import 'package:cars/shared/widget/app_dialog.dart';
 import 'package:cars/shared/widget/app_input_text.dart';
 import 'package:cars/shared/widget/app_radio_button.dart';
 import 'package:cars/shared/widget/app_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
 class CarFormPage extends StatefulWidget {
   final Car? car;
@@ -25,6 +31,7 @@ class _CarroFormPageState extends State<CarFormPage> {
   final tNome = TextEditingController();
   final tDesc = TextEditingController();
   final tTipo = TextEditingController();
+  File? _file;
 
   int _radioIndex = 0;
 
@@ -111,14 +118,61 @@ class _CarroFormPageState extends State<CarFormPage> {
   }
 
   _headerFoto() {
-    return car != null
-        ? CachedNetworkImage(
-            imageUrl: car!.urlFoto ?? '',
-          )
-        : Image.asset(
-            "assets/images/camera.png",
-            height: 150,
-          );
+    return GestureDetector(
+      onTap: () => showDialog(
+          context: context,
+          builder: (BuildContext dialigContext) => AppDialoag(
+                "Select when you get a picture:",
+                actions: [
+                  TextButton(
+                    child: Text('From galery'),
+                    onPressed: () {
+                      Navigator.pop(dialigContext);
+                      _onImageButtonPressed(ImageSource.gallery);
+                    },
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      Navigator.pop(dialigContext);
+                      _onImageButtonPressed(ImageSource.camera);
+                    },
+                    child: Text('from camera'),
+                  )
+                ],
+              )),
+      child: _file != null
+          ? Image.file(
+              _file!,
+              height: 150,
+            )
+          : car != null
+          ? CachedNetworkImage(
+              imageUrl: car!.urlFoto ?? '',
+            )
+          : Image.asset(
+              "assets/images/camera.png",
+              height: 150,
+            ),
+    );
+  }
+
+  void _onImageButtonPressed(ImageSource source) async {
+    try {
+      final pickedFile = await ImagePicker().getImage(
+        source: source,
+      );
+
+      if (pickedFile != null) {
+        setState(() {
+          _file = File(pickedFile.path);
+        });
+      }
+    } catch (e) {
+      showDialog(
+          context: context,
+          builder: (BuildContext imagecontext) =>
+              AppDialoag("Error on take picture"));
+    }
   }
 
   _radioTipo() {
@@ -181,13 +235,18 @@ class _CarroFormPageState extends State<CarFormPage> {
       return;
     }
 
-    // Cria o car
     Car c = car ?? Car();
     c.nome = tNome.text;
     c.desc = tDesc.text;
     c.tipo = _getTipo();
 
     setState(() => _showProgress = true);
+
+    if (_file != null) {
+      UploadModel uploaded = UploadModel.fromFile(_file!, 'image/jpg');
+      final String response = await UploadApi().uploadImage(uploaded);
+      c.urlFoto = response;
+    }
 
     ApiResponse response;
     if (car == null) {
