@@ -1,6 +1,9 @@
+import 'dart:async';
+
 import 'package:cars/car/car.dart';
 import 'package:cars/car/car_bloc.dart';
 import 'package:cars/car/car_list_view.dart';
+import 'package:cars/shared/event_bus.dart';
 import 'package:cars/shared/widget/app_text.dart';
 import 'package:cars/shared/widget/loading.dart';
 import 'package:cars/shared/widget/text_error.dart';
@@ -16,6 +19,8 @@ class CarsPage extends StatefulWidget {
 
 class _CarsPageState extends State<CarsPage>
     with AutomaticKeepAliveClientMixin<CarsPage> {
+  late StreamSubscription<Event> subscription;
+
   @override
   bool get wantKeepAlive => true;
 
@@ -26,6 +31,14 @@ class _CarsPageState extends State<CarsPage>
     super.initState();
 
     _loadData();
+
+    final bus = EventBus.get(context);
+    subscription = bus.stream.listen((Event event) {
+      CarEvent carEvent = event as CarEvent;
+      if (carEvent.type == widget.type) {
+        _loadData();
+      }
+    });
   }
 
   Future<void> _loadData() {
@@ -68,5 +81,7 @@ class _CarsPageState extends State<CarsPage>
   void dispose() {
     super.dispose();
     _bloc.dispose();
+
+    subscription.cancel();
   }
 }

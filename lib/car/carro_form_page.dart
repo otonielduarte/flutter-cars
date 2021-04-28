@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cars/car/car.dart';
 import 'package:cars/car/car_api.dart';
+import 'package:cars/shared/event_bus.dart';
 import 'package:cars/shared/services/api_response.dart';
 import 'package:cars/shared/services/upload_api.dart';
 import 'package:cars/shared/upload/upload_model.dart';
@@ -261,6 +262,12 @@ class _CarroFormPageState extends State<CarFormPage> {
 
     if (response.ok) {
       showToast('Carro ${response.result.nome} salvo com sucesso!');
+      EventBus.get(context).sendEvent(
+        CarEvent(
+          action: "new car",
+          type: c.tipo!,
+        ),
+      );
       Navigator.pop(context);
     } else {
       showToast(response.msg);

@@ -1,7 +1,7 @@
 import 'dart:async';
 
 abstract class GenericBloc<T> {
-  final _controller = StreamController<T>();
+  final _controller = StreamController<T>.broadcast();
 
   Stream<T> get stream => _controller.stream;
 

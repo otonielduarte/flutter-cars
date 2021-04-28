@@ -3,6 +3,7 @@ import 'package:cars/car/car.dart';
 import 'package:cars/car/car_api.dart';
 import 'package:cars/car/carro_form_page.dart';
 import 'package:cars/car/lorem_bloc.dart';
+import 'package:cars/shared/event_bus.dart';
 import 'package:cars/shared/util/nav.dart';
 import 'package:cars/shared/util/toast.dart';
 import 'package:cars/shared/widget/app_text.dart';
@@ -168,6 +169,10 @@ class _DetailCarPageState extends State<DetailCarPage> {
     final response = await CarApi().remove(carId);
     if (response.ok) {
       showToast(response.result);
+      EventBus.get(context).sendEvent(CarEvent(
+        action: "deleted",
+        type: car.tipo!,
+      ));
       Navigator.pop(context);
     }
     showToast(response.msg);

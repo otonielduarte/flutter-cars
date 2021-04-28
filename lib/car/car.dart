@@ -1,7 +1,22 @@
+import 'package:cars/shared/event_bus.dart';
+
 class CarType {
   static final classicos = "classicos";
   static final esportivos = "esportivos";
   static final luxo = "luxo";
+}
+
+class CarEvent extends Event {
+  String action;
+
+  String type;
+  CarEvent({
+    required this.action,
+    required this.type,
+  });
+
+  @override
+  String toString() => 'CarEvent(action: $action, type: $type)';
 }
 
 class Car {
