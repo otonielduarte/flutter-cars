@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:share_plus/share_plus.dart';
 
 import 'package:cars/car/car.dart';
-import 'package:cars/car/details_car_page.dart';
+import 'package:cars/details/details_car_page.dart';
 import 'package:cars/shared/util/nav.dart';
 
 class CarsListView extends StatelessWidget {

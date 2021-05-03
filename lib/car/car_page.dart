@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:cars/car/car.dart';
 import 'package:cars/car/car_bloc.dart';
-import 'package:cars/car/car_list_view.dart';
+import 'package:cars/car/widgets/car_list_view.dart';
 import 'package:cars/shared/event_bus.dart';
 import 'package:cars/shared/widget/app_text.dart';
 import 'package:cars/shared/widget/loading.dart';

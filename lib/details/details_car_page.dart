@@ -1,8 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cars/car/car.dart';
 import 'package:cars/car/car_api.dart';
-import 'package:cars/car/carro_form_page.dart';
-import 'package:cars/car/lorem_bloc.dart';
+import 'package:cars/car/car_form_page.dart';
+import 'package:cars/details/lorem_bloc.dart';
 import 'package:cars/shared/event_bus.dart';
 import 'package:cars/shared/util/nav.dart';
 import 'package:cars/shared/util/toast.dart';

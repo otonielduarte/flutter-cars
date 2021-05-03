@@ -1,4 +1,4 @@
-import 'package:cars/car/home_page.dart';
+import 'package:cars/home/home_page.dart';
 import 'package:cars/login/login_page.dart';
 import 'package:cars/login/user.dart';
 import 'package:cars/shared/util/nav.dart';
