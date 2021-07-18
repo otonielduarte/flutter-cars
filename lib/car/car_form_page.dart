@@ -55,8 +55,8 @@ class _CarroFormPageState extends State<CarFormPage> {
 
     // Copia os dados do car para o form
     if (car != null) {
-      tNome.text = car!.nome ?? '';
-      tDesc.text = car!.desc ?? '';
+      tNome.text = car!.nome!;
+      tDesc.text = car!.desc!;
       _radioIndex = getTipoInt(car!);
     }
   }
@@ -147,13 +147,13 @@ class _CarroFormPageState extends State<CarFormPage> {
               height: 150,
             )
           : car != null
-          ? CachedNetworkImage(
-              imageUrl: car!.urlFoto ?? '',
-            )
-          : Image.asset(
-              "assets/images/camera.png",
-              height: 150,
-            ),
+              ? CachedNetworkImage(
+                  imageUrl: car!.urlFoto ?? '',
+                )
+              : Image.asset(
+                  "assets/images/camera.png",
+                  height: 150,
+                ),
     );
   }
 

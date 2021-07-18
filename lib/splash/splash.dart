@@ -18,7 +18,7 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   void _onInit() async {
-    Future<User> future1 = User.get();
+    final future1 = User.get();
 
     Future delay = Future.delayed(Duration(seconds: 2));
 

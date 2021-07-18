@@ -8,11 +8,11 @@ import 'package:http_interceptor/http_interceptor.dart';
 
 abstract class BaseApi {
   getHeaders() async {
-    User user = await User.get();
+    User? user = await User.get();
 
     Map<String, String> headers = {
       "Content-type": "application/json",
-      "Authorization": "Bearer ${user.token}"
+      "Authorization": "Bearer ${user?.token}"
     };
     return headers;
   }
